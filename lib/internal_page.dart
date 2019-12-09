@@ -15,45 +15,59 @@ class InternalPage extends StatefulWidget {
   _InternalPageState createState() => _InternalPageState();
 }
 
-class _InternalPageState extends State<InternalPage> {
+class _InternalPageState extends State<InternalPage>
+    with AutomaticKeepAliveClientMixin {
   int currentInternalPage = 0;
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Navigator(
-      key: widget.navigatorKey,
-      onGenerateRoute: (RouteSettings settings) {
-        return CupertinoPageRoute(builder: (BuildContext context) {
-          return Container(
-              alignment: Alignment.center,
-              color: Colors.green,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text("Page $currentInternalPage"),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      FlatButton(
-                          onPressed: () {
-                            if (navigator.canPop()) {
-                              navigator.pop();
-                            }
-                          },
-                          child: Text('Navigate back')),
-                      FlatButton(
-                          onPressed: () {
-                            navigator.pushNamed('${currentInternalPage++}');
-                          },
-                          child: Text('Navigate Forward'))
-                    ],
-                  )
-                ],
-              ));
-        });
-      },
+    super.build(context);
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: Navigator(
+            key: widget.navigatorKey,
+            onGenerateRoute: (RouteSettings settings) {
+              return CupertinoPageRoute(builder: (BuildContext context) {
+                return Container(
+                    alignment: Alignment.center,
+                    color: widget.pageIndex == 0
+                        ? Colors.green.shade300
+                        : Colors.red.shade300,
+                    child: Text("Page $currentInternalPage"));
+              });
+            },
+          ),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  if (navigator.canPop()) {
+                    navigator.pop();
+                  }
+                },
+                child: Text('Navigate back')),
+            FlatButton(
+                onPressed: () {
+                  navigator.pushNamed('${currentInternalPage++}');
+                },
+                child: Text('Navigate Forward'))
+          ],
+        )
+      ],
     );
   }
 
   NavigatorState get navigator => widget.navigatorKey.currentState;
+
+  @override
+  bool get wantKeepAlive => true;
 }
