@@ -20,12 +20,6 @@ class _InternalPageState extends State<InternalPage>
   int currentInternalPage = 0;
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
     return Column(
@@ -34,7 +28,7 @@ class _InternalPageState extends State<InternalPage>
           child: Navigator(
             key: widget.navigatorKey,
             onGenerateRoute: (RouteSettings settings) {
-              return CupertinoPageRoute(builder: (BuildContext context) {
+              return MaterialPageRoute(builder: (BuildContext context) {
                 return Container(
                     alignment: Alignment.center,
                     color: widget.pageIndex == 0
